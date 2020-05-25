@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Books</string>
+    <string name="title_activity_huidig_books">MY Books</string>
+    <string name="titleHuidigBooks">Huidige Boeken</string>
+    <string name="titleToekomestigeBoeken">Toekomestige Boeken</string>
+    <string name="titleboekentoevoegen">Boeken Toevoegn</string>
+    <string name="placeHolderInput">Type de naam van het Boek</string>
+    <string name="quistion">Waar wilt u het boek toevoegen?</string>
+    <string name="buttenHuidigeBoeken">Huidige Boeken</string>
+    <string name="buttonToekomsitgeBoeken">Toekomsitge Boeken</string>
+    <string name="title_activity_toekomstig_boeken">ToekomstigBoekenActivity</string>
+</resources>
