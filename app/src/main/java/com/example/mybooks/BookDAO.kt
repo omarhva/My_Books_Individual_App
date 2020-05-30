@@ -24,5 +24,6 @@ interface BookDAO{
     @Insert
     fun insertToeKomstigBook(book: ToekomstigBoek)
 
-
+    @Delete
+    fun deleteToekomstigBook(book: ToekomstigBoek)
 }

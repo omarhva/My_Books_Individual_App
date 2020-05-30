@@ -3,14 +3,15 @@ package com.example.mybooks
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import kotlinx.android.synthetic.main.activity_toekomstig_boeken.*
-import kotlinx.android.synthetic.main.content_huidig_books.*
 import kotlinx.android.synthetic.main.content_toekomstig_boeken.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,13 +31,38 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_toekomstig_boeken)
         setSupportActionBar(toolbar)
 
+        //bookRepository = BookRepository(this)
         bookRepository = BookRepository(this)
         initViews()
         fab.setOnClickListener {  startAddActivity()
         }
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+//        return when (item.itemId) {
+//            R.id.action_settings -> true
+//
+//            else -> super.onOptionsItemSelected(item)
+//        }
+        val id = item.itemId
+        if (id== R.id.action_settings_Huidig){
+            val resultIntent = Intent(this, HuidigBooksActivity::class.java
+            )
+            startActivity(resultIntent)
+        }
+        return super.onOptionsItemSelected(item)
     }
     private fun startAddActivity() {
-        val intent = Intent(this, BoekenToevogenActivity::class.java)
+        val intent = Intent(this, BoekenToevoegenToekomstig::class.java)
         startActivityForResult(intent, ADD_TOEKOMSTIG_Book_REQUEST_CODE)
     }
 
@@ -52,7 +78,7 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             )
 
         )
-       // createItemTouchHelper().attachToRecyclerView(rvHuidigBoeken)
+        createItemTouchHelper().attachToRecyclerView(rvToekomstigBoeken)
         getBooksFromDatabase()
 
     }
@@ -68,7 +94,7 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ADD_TOEKOMSTIG_Book_REQUEST_CODE) {
             when (requestCode) {
                 ADD_TOEKOMSTIG_Book_REQUEST_CODE -> {
                     val book = data!!.getParcelableExtra<ToekomstigBoek>(NEW_ToekomstigBook_BOOK)
@@ -86,6 +112,38 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    private fun createItemTouchHelper(): ItemTouchHelper {
+
+        // Callback which is used to create the ItemTouch helper. Only enables left swipe.
+        // Use ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) to also enable right swipe.
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            // Enables or Disables the ability to move items up and down.
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            // Callback triggered when a user swiped an item.
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+//                books.removeAt(position)
+//                booksAdapter.notifyDataSetChanged()
+                val bookToDelete = toekomsitgbooks[position]
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+
+                        bookRepository.deleteToeKomstigBook(bookToDelete)
+                    }
+                    getBooksFromDatabase()
+                }
+            }
+        }
+        return ItemTouchHelper(callback)
     }
 
 }

@@ -36,8 +36,12 @@ public class BookRepository(context: Context) {
     }
 
     suspend fun insertToeKomstigBook(book: ToekomstigBoek) {
-        bookDao.insertToeKomstigBook(ToekomstigBoek("fake book"))
+//        bookDao.insertToeKomstigBook(ToekomstigBoek("fake book"))
         bookDao.insertToeKomstigBook(book)
     }
+        suspend fun deleteToeKomstigBook(book: ToekomstigBoek) {
+        bookDao.deleteToekomstigBook(book)
+    }
+
 
 }

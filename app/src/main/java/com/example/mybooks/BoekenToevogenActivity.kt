@@ -8,7 +8,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_boeken_toevogen.*
 
 const val NEW_BOOK = "NEW_BOOK"
-const val NEW_ToekomstigBook_BOOK = "NEW_TOEKOMSTIG_BOOK"
+//const val NEW_ToekomstigBook_BOOK = "NEW_TOEKOMSTIG_BOOK"
 
 class BoekenToevogenActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class BoekenToevogenActivity : AppCompatActivity() {
 
     private fun initViews() {
         btHuidigBoeken.setOnClickListener { onSaveClick() }
-        btToekoemstigeBoeken.setOnClickListener { (onSaveClickToekomstigBoek()) }
+        //btToekoemstigeBoeken.setOnClickListener { (onSaveClickToekomstigBoek()) }
     }
 
     private fun onSaveClick() {
@@ -44,24 +44,24 @@ class BoekenToevogenActivity : AppCompatActivity() {
         }
     }
 
-    private fun onSaveClickToekomstigBoek() {
-        if (etAddBoek.text.toString().isNotBlank()) {
-            val book = Book(etAddBoek.text.toString())
-            val resultIntent = Intent()
-            resultIntent.putExtra(NEW_ToekomstigBook_BOOK, book)
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-        } else {
-            Toast.makeText(
-                this, "Je hebt niks toegevoegd"
-                , Toast.LENGTH_SHORT
-            ).show()
-//            //Go back to ToekomstigBoeken
-            val resultIntent = Intent(
-                this,
-                ToekomstigBoekenActivity::class.java
-            )
-            startActivity(resultIntent);
-        }
-    }
+//    private fun onSaveClickToekomstigBoek() {
+//        if (etAddBoek.text.toString().isNotBlank()) {
+//            val book = Book(etAddBoek.text.toString())
+//            val resultIntent = Intent()
+//            resultIntent.putExtra(NEW_ToekomstigBook_BOOK, book)
+//            setResult(Activity.RESULT_OK, resultIntent)
+//            finish()
+//        } else {
+//            Toast.makeText(
+//                this, "Je hebt niks toegevoegd"
+//                , Toast.LENGTH_SHORT
+//            ).show()
+////            //Go back to ToekomstigBoeken
+//            val resultIntent = Intent(
+//                this,
+//                ToekomstigBoekenActivity::class.java
+//            )
+//            startActivity(resultIntent);
+//        }
+//    }
 }

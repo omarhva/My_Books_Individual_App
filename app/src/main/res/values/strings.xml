@@ -4,9 +4,13 @@
     <string name="titleHuidigBooks">Huidige Boeken</string>
     <string name="titleToekomestigeBoeken">Toekomestige Boeken</string>
     <string name="titleboekentoevoegen">Boeken Toevoegn</string>
+    <string name="titleToekomstigboekentoevoegen">Toekomstig Boeken Toevoegn</string>
     <string name="placeHolderInput">Type de naam van het Boek</string>
-    <string name="quistion">Waar wilt u het boek toevoegen?</string>
+    <string name="quistion">Klik de button hieronder om het boek toe te voegen</string>
     <string name="buttenHuidigeBoeken">Huidige Boeken</string>
     <string name="buttonToekomsitgeBoeken">Toekomsitge Boeken</string>
     <string name="title_activity_toekomstig_boeken">ToekomstigBoekenActivity</string>
+    <string name="action_Toekomstig">Toekomsitg Boekn</string>
+    <string name="action_Huidig">Huidig Boeken</string>
+
 </resources>
