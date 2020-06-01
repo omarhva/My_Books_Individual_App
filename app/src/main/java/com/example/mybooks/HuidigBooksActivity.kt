@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mybooks.adapter.BookAdapter
+import com.example.mybooks.model.Book
+import com.example.mybooks.repsitories.BookRepository
 
 import kotlinx.android.synthetic.main.activity_huidig_books.*
 import kotlinx.android.synthetic.main.content_huidig_books.*

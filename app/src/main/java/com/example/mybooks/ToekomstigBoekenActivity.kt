@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mybooks.adapter.ToekomstigBookAdapter
+import com.example.mybooks.model.ToekomstigBoek
+import com.example.mybooks.repsitories.BookRepository
 
 import kotlinx.android.synthetic.main.activity_toekomstig_boeken.*
 import kotlinx.android.synthetic.main.content_toekomstig_boeken.*
@@ -23,7 +26,8 @@ const val ADD_TOEKOMSTIG_Book_REQUEST_CODE = 101
 class ToekomstigBoekenActivity : AppCompatActivity() {
 
     private val toekomsitgbooks = arrayListOf<ToekomstigBoek>()
-    private val toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
+    private val toekomstigbooksAdapter =
+        ToekomstigBookAdapter(toekomsitgbooks)
     private lateinit var bookRepository: BookRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,17 +1,19 @@
-package com.example.mybooks
+package com.example.mybooks.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_huidig_boek.view.*
+import com.example.mybooks.R
+import com.example.mybooks.model.ToekomstigBoek
+import kotlinx.android.synthetic.main.item_toekomstig_book.view.*
 
-class BookAdapter(private val books: List<Book>) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class ToekomstigBookAdapter(private val books: List<ToekomstigBoek>) : RecyclerView.Adapter<ToekomstigBookAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(books: Book) {
-            itemView.tvHuidigBoek.text = books.bookText
+        fun bind(books: ToekomstigBoek) {
+            itemView.tvToekomstigBook.text = books.bookText
 
         }
     }
@@ -21,7 +23,7 @@ class BookAdapter(private val books: List<Book>) : RecyclerView.Adapter<BookAdap
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_huidig_boek, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_toekomstig_book, parent, false)
         )
     }
 

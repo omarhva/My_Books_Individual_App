@@ -1,12 +1,17 @@
-package com.example.mybooks
+package com.example.mybooks.repsitories
 
 import android.content.Context
+import com.example.mybooks.dao.BookDAO
+import com.example.mybooks.BookRoomDatabase
+import com.example.mybooks.model.Book
+import com.example.mybooks.model.ToekomstigBoek
 
 public class BookRepository(context: Context) {
     private var bookDao: BookDAO
     // Context object because we need this to access the database.
     init {
-        val bookRoomDatabase = BookRoomDatabase.getDatabase(context)
+        val bookRoomDatabase =
+            BookRoomDatabase.getDatabase(context)
         bookDao = bookRoomDatabase!!.bookDao()
     }
 

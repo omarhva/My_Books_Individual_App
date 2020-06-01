@@ -1,6 +1,8 @@
-package com.example.mybooks
+package com.example.mybooks.dao
 
 import androidx.room.*
+import com.example.mybooks.model.Book
+import com.example.mybooks.model.ToekomstigBoek
 
 @Dao
 interface BookDAO{

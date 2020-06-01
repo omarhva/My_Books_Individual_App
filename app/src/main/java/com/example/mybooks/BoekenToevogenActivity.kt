@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.mybooks.model.Book
 import kotlinx.android.synthetic.main.activity_boeken_toevogen.*
 
 const val NEW_BOOK = "NEW_BOOK"
