@@ -3,13 +3,16 @@ package com.example.mybooks
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mybooks.adapter.BookAdapter
 import com.example.mybooks.adapter.ToekomstigBookAdapter
 import com.example.mybooks.model.ToekomstigBoek
 import com.example.mybooks.repsitories.BookRepository
@@ -20,28 +23,58 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.lifecycle.Observer
+
 
 const val ADD_TOEKOMSTIG_Book_REQUEST_CODE = 101
+const val TAG1 = "ToekomstigActivity"
+
 
 class ToekomstigBoekenActivity : AppCompatActivity() {
 
-    private val toekomsitgbooks = arrayListOf<ToekomstigBoek>()
-    private val toekomstigbooksAdapter =
-        ToekomstigBookAdapter(toekomsitgbooks)
-    private lateinit var bookRepository: BookRepository
+    private var toekomsitgbooks = arrayListOf<ToekomstigBoek>()
+    private var toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
+    // private lateinit var bookRepository: BookRepository
+
+    private val viewModel: MainActivityViewModel by viewModels()
+    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_toekomstig_boeken)
         setSupportActionBar(toolbar)
+        // bookRepository = BookRepository(this)
+        recyclerView = findViewById(R.id.rvToekomstigBoeken)
 
+        toekomsitgbooks = arrayListOf()
+
+        toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
+
+        viewManager = LinearLayoutManager(this)
+        createItemTouchHelper().attachToRecyclerView(recyclerView)
+        observeViewModel()
+        recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = toekomstigbooksAdapter
+        }
         //bookRepository = BookRepository(this)
-        bookRepository = BookRepository(this)
-        initViews()
-        fab.setOnClickListener {  startAddActivity()
+        //initViews()
+        fab.setOnClickListener {
+            startAddActivity()
         }
 
     }
+
+    private fun observeViewModel() {
+        viewModel.toekomstigBooks.observe(this, Observer { toekomstigBoeks ->
+            this@ToekomstigBoekenActivity.toekomsitgbooks.clear()
+            this@ToekomstigBoekenActivity.toekomsitgbooks.addAll(toekomstigBoeks)
+            toekomstigbooksAdapter.notifyDataSetChanged()
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu, menu)
@@ -58,65 +91,80 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
 //            else -> super.onOptionsItemSelected(item)
 //        }
         val id = item.itemId
-        if (id== R.id.action_settings_Huidig){
-            val resultIntent = Intent(this, HuidigBooksActivity::class.java
+        if (id == R.id.action_settings_Huidig) {
+            val resultIntent = Intent(
+                this, HuidigBooksActivity::class.java
             )
             startActivity(resultIntent)
         }
         return super.onOptionsItemSelected(item)
     }
+
     private fun startAddActivity() {
         val intent = Intent(this, BoekenToevoegenToekomstig::class.java)
         startActivityForResult(intent, ADD_TOEKOMSTIG_Book_REQUEST_CODE)
     }
 
-    private fun initViews() {
-        // Initialize the recycler view with a linear layout manager, adapter
-        rvToekomstigBoeken.layoutManager =
-            LinearLayoutManager(this@ToekomstigBoekenActivity, RecyclerView.VERTICAL, false)
-        rvToekomstigBoeken.adapter = toekomstigbooksAdapter
-        rvToekomstigBoeken.addItemDecoration(
-            DividerItemDecoration(
-                this@ToekomstigBoekenActivity,
-                DividerItemDecoration.VERTICAL
-            )
+//    private fun initViews() {
+//        // Initialize the recycler view with a linear layout manager, adapter
+//        rvToekomstigBoeken.layoutManager =
+//            LinearLayoutManager(this@ToekomstigBoekenActivity, RecyclerView.VERTICAL, false)
+//        rvToekomstigBoeken.adapter = toekomstigbooksAdapter
+//        rvToekomstigBoeken.addItemDecoration(
+//            DividerItemDecoration(
+//                this@ToekomstigBoekenActivity,
+//                DividerItemDecoration.VERTICAL
+//            )
+//
+//        )
+//        createItemTouchHelper().attachToRecyclerView(rvToekomstigBoeken)
+//        getBooksFromDatabase()
+//
+//    }
 
-        )
-        createItemTouchHelper().attachToRecyclerView(rvToekomstigBoeken)
-        getBooksFromDatabase()
-
-    }
-
-    private fun getBooksFromDatabase() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val books = withContext(Dispatchers.IO) {
-                bookRepository.getAllToeKomstigBooks()
-            }
-            this@ToekomstigBoekenActivity.toekomsitgbooks.clear()
-            this@ToekomstigBoekenActivity.toekomsitgbooks.addAll(books)
-            toekomstigbooksAdapter.notifyDataSetChanged()
-        }
-    }
+    //    private fun getBooksFromDatabase() {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val books = withContext(Dispatchers.IO) {
+//                bookRepository.getAllToeKomstigBooks()
+//            }
+//            this@ToekomstigBoekenActivity.toekomsitgbooks.clear()
+//            this@ToekomstigBoekenActivity.toekomsitgbooks.addAll(books)
+//            toekomstigbooksAdapter.notifyDataSetChanged()
+//        }
+//    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == Activity.RESULT_OK && requestCode == ADD_TOEKOMSTIG_Book_REQUEST_CODE) {
             when (requestCode) {
                 ADD_TOEKOMSTIG_Book_REQUEST_CODE -> {
-                    val book = data!!.getParcelableExtra<ToekomstigBoek>(NEW_ToekomstigBook_BOOK)
+                    data?.let { safeData ->
+                        val book =
+                            safeData.getParcelableExtra<ToekomstigBoek>(NEW_ToekomstigBook_BOOK)
+                        book?.let { safeToekomstigBoek ->
+                            viewModel.insertToekomstigBook(safeToekomstigBoek)
+                        } ?: run {
+                            Log.e(TAG1, "reminder is null")
+                        }
+                    } ?: run {
+                        Log.e(TAG1, "empty intent data received")
+                    }
+                }
 //                    books.add(book)
 //                    booksAdapter.notifyDataSetChanged()
-                    //we gebruiker  Coroutine omdat supsend mthodes worden alleen gecalld via een Coroutine
-                    CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO) {
-                            bookRepository.insertToeKomstigBook(book)
-                        }
-                        getBooksFromDatabase()
-                    }
+                //we gebruiker  Coroutine omdat supsend mthodes worden alleen gecalld via een Coroutine
+//                    CoroutineScope(Dispatchers.Main).launch {
+//                        withContext(Dispatchers.IO) {
+//                            bookRepository.insertToeKomstigBook(book)
+//                        }
+//                        getBooksFromDatabase()
+//                    }
 
 
-                }
             }
         }
     }
+
     private fun createItemTouchHelper(): ItemTouchHelper {
 
         // Callback which is used to create the ItemTouch helper. Only enables left swipe.
@@ -138,13 +186,14 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
 //                books.removeAt(position)
 //                booksAdapter.notifyDataSetChanged()
                 val bookToDelete = toekomsitgbooks[position]
-                CoroutineScope(Dispatchers.Main).launch {
-                    withContext(Dispatchers.IO) {
+                viewModel.deleteToekomstigBook(bookToDelete)
 
-                        bookRepository.deleteToeKomstigBook(bookToDelete)
-                    }
-                    getBooksFromDatabase()
-                }
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    withContext(Dispatchers.IO) {
+//                       // bookRepository.deleteToeKomstigBook(bookToDelete)
+//                    }
+//                    getBooksFromDatabase()
+//                }
             }
         }
         return ItemTouchHelper(callback)

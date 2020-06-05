@@ -1,5 +1,6 @@
 package com.example.mybooks.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.mybooks.model.Book
 import com.example.mybooks.model.ToekomstigBoek
@@ -7,7 +8,7 @@ import com.example.mybooks.model.ToekomstigBoek
 @Dao
 interface BookDAO{
     @Query("SELECT * FROM booktable")
-    fun getAllBooks(): List<Book>
+    fun getAllBooks(): LiveData<List<Book>>
 
     @Insert
     fun insertBook(book: Book)
@@ -21,7 +22,7 @@ interface BookDAO{
 
 //toekomstigBooks
     @Query("SELECT * FROM ToekmstigBoekTable")
-    fun getAllToeKomstigBooks(): List<ToekomstigBoek>
+    fun getAllToeKomstigBooks(): LiveData<List<ToekomstigBoek>>
 
     @Insert
     fun insertToeKomstigBook(book: ToekomstigBoek)
