@@ -33,6 +33,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             bookRepository.deleteBook(boek)
         }
     }
+    fun deleteAllHuidgBooks() {
+        ioScope.launch {
+            bookRepository.deleteAllHuidigBooks()
+        }
+    }
+
 
     /**
      * Toekomstig Books methodes
@@ -47,6 +53,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     fun deleteToekomstigBook(boek: ToekomstigBoek) {
         ioScope.launch {
             bookRepository.deleteToeKomstigBook(boek)
+        }
+    }
+    fun deleteAllToekomstigBooks() {
+        ioScope.launch {
+            bookRepository.deleteAllToekomstigBooks()
         }
     }
 

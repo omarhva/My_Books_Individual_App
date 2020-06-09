@@ -2,27 +2,22 @@ package com.example.mybooks
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mybooks.adapter.BookAdapter
 import com.example.mybooks.model.Book
-import com.example.mybooks.repsitories.BookRepository
 
 import kotlinx.android.synthetic.main.activity_huidig_books.*
-import kotlinx.android.synthetic.main.content_huidig_books.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 
 
 const val ADD_Book_REQUEST_CODE = 100
@@ -33,12 +28,11 @@ class HuidigBooksActivity : AppCompatActivity() {
 
     private var books = arrayListOf<Book>()
     private var booksAdapter = BookAdapter(books)
-   // private lateinit var bookRepository: BookRepository
+
+    // private lateinit var bookRepository: BookRepository
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var recyclerView: RecyclerView
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +63,7 @@ class HuidigBooksActivity : AppCompatActivity() {
         }
 
     }
+
     private fun observeViewModel() {
         viewModel.huidgBooks.observe(this, Observer { books ->
             this@HuidigBooksActivity.books.clear()
@@ -94,10 +89,15 @@ class HuidigBooksActivity : AppCompatActivity() {
 //            else -> super.onOptionsItemSelected(item)
 //        }
         val id = item.itemId
-        if (id== R.id.action_settings_toekomstig){
-            val resultIntent = Intent(this, ToekomstigBoekenActivity::class.java
+        if (id == R.id.action_settings_toekomstig) {
+            val resultIntent = Intent(
+                this, ToekomstigBoekenActivity::class.java
             )
             startActivity(resultIntent)
+        }
+        if (id == R.id.action_delete_Books_list) {
+            deletAllHuidigBooks()
+            true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -142,12 +142,12 @@ class HuidigBooksActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 ADD_Book_REQUEST_CODE -> {
-                    data?.let {safeData ->
-                    val book = safeData.getParcelableExtra<Book>(NEW_BOOK)
+                    data?.let { safeData ->
+                        val book = safeData.getParcelableExtra<Book>(NEW_BOOK)
                         book?.let { safeBook ->
                             viewModel.insertHuidgBook(safeBook)
                         } ?: run {
-                            Log.e(TAG, "reminder is null")
+                            Log.e(TAG, "book is null")
                         }
                     } ?: run {
                         Log.e(TAG, "empty intent data received")
@@ -168,6 +168,22 @@ class HuidigBooksActivity : AppCompatActivity() {
         }
     }
 
+    private fun deletAllHuidigBooks() {
+        val booksToDelete = ArrayList<Book>()
+        booksToDelete.addAll(books)
+        viewModel.deleteAllHuidgBooks()
+        Snackbar.make(
+                findViewById(R.id.rvHuidigBoeken),
+                "Alle boeken zijn verwijderd!",
+                Snackbar.LENGTH_LONG
+            ).setActionTextColor(Color.RED)
+            .setAction("UNDO") {
+                booksToDelete.forEach {
+                    viewModel.insertHuidgBook(it)
+                }
+            }.show()
+    }
+
     private fun createItemTouchHelper(): ItemTouchHelper {
 
         // Callback which is used to create the ItemTouch helper. Only enables left swipe.
@@ -186,17 +202,19 @@ class HuidigBooksActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-//                books.removeAt(position)
-//                booksAdapter.notifyDataSetChanged()
                 val bookToDelete = books[position]
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    withContext(Dispatchers.IO) {
-//
-//                        bookRepository.deleteBook(bookToDelete)
-//                    }
-//                    getBooksFromDatabase()
-//                }
-                viewModel.deleteHuidgBook(bookToDelete)
+                if (direction == ItemTouchHelper.LEFT) {
+
+                    viewModel.deleteHuidgBook(bookToDelete)
+                    Snackbar
+                        .make(viewHolder.itemView, "Het boek is verwijderd", Snackbar.LENGTH_LONG)
+                        .setActionTextColor(Color.RED)
+                        .setAction("UNDO") {
+                            viewModel.insertHuidgBook(bookToDelete)
+                        }
+                        .show()
+                }
+                booksAdapter.notifyDataSetChanged()
 
             }
         }

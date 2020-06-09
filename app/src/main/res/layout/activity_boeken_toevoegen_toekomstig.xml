@@ -4,17 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgorund"
+
     tools:context=".BoekenToevoegenToekomstig">
+
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="347dp"
-        android:layout_height="70dp"
+        android:layout_width="367dp"
+        android:layout_height="100dp"
         android:layout_marginTop="48dp"
+        android:background="@drawable/background_layout_titels"
         android:text="@string/titleToekomstigboekentoevoegen"
         android:textAlignment="center"
-        android:textColor="#020000"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
-        android:textStyle="bold"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,6 +28,8 @@
         android:layout_width="387dp"
         android:layout_height="88dp"
         android:layout_marginTop="100dp"
+        android:scrollbarSize="4dp"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +40,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/placeHolderInput"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#00EEEBEB"
+            android:textColorHint="#EEE2E5"
+            android:textColorLink="#00FFFFFF"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,15 +51,15 @@
         android:id="@+id/Quistion"
         android:layout_width="378dp"
         android:layout_height="64dp"
-        android:layout_marginTop="252dp"
-        android:layout_marginBottom="21dp"
+        android:layout_marginTop="100dp"
         android:text="@string/quistion"
         android:textAlignment="center"
+        android:textColor="#F3E9E9"
+        android:textColorLink="#B0E7B7"
         android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btToekomstig"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintHorizontal_bias="0.757"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
@@ -58,13 +68,18 @@
         android:layout_width="289dp"
         android:layout_height="72dp"
         android:layout_marginStart="60dp"
+        android:layout_marginTop="62dp"
         android:layout_marginEnd="62dp"
+        android:layout_marginBottom="96dp"
+        android:background="@drawable/background_buttens"
         android:text="@string/buttonToekomsitgeBoeken"
+        android:textColor="#F3EEEE"
+        android:textColorLink="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Quistion"
-        app:layout_constraintVertical_bias="0.567" />
+        app:layout_constraintTop_toBottomOf="@+id/Quistion" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

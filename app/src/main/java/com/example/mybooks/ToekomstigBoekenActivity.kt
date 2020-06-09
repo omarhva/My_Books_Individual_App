@@ -2,28 +2,22 @@ package com.example.mybooks
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mybooks.adapter.BookAdapter
 import com.example.mybooks.adapter.ToekomstigBookAdapter
 import com.example.mybooks.model.ToekomstigBoek
-import com.example.mybooks.repsitories.BookRepository
 
 import kotlinx.android.synthetic.main.activity_toekomstig_boeken.*
-import kotlinx.android.synthetic.main.content_toekomstig_boeken.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 
 
 const val ADD_TOEKOMSTIG_Book_REQUEST_CODE = 101
@@ -44,6 +38,8 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_toekomstig_boeken)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "My Books"
+
         // bookRepository = BookRepository(this)
         recyclerView = findViewById(R.id.rvToekomstigBoeken)
 
@@ -96,6 +92,10 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
                 this, HuidigBooksActivity::class.java
             )
             startActivity(resultIntent)
+        }
+        if (id==R.id.action_delete_Books_list){
+            deletAllToekomstigBooks()
+            true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -164,6 +164,21 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             }
         }
     }
+    private fun deletAllToekomstigBooks() {
+        val boeksToDelete = ArrayList<ToekomstigBoek>()
+        boeksToDelete.addAll(toekomsitgbooks)
+        viewModel.deleteAllToekomstigBooks()
+        Snackbar.make(
+                findViewById(R.id.rvToekomstigBoeken),
+                "Alle boeken zijn verwijderd!",
+                Snackbar.LENGTH_LONG
+            ).setActionTextColor(Color.RED)
+            .setAction("UNDO") {
+                boeksToDelete.forEach {
+                    viewModel.insertToekomstigBook(it)
+                }
+            }.show()
+    }
 
     private fun createItemTouchHelper(): ItemTouchHelper {
 
@@ -183,17 +198,20 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-//                books.removeAt(position)
-//                booksAdapter.notifyDataSetChanged()
                 val bookToDelete = toekomsitgbooks[position]
-                viewModel.deleteToekomstigBook(bookToDelete)
+                if(direction == ItemTouchHelper.LEFT) {
 
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    withContext(Dispatchers.IO) {
-//                       // bookRepository.deleteToeKomstigBook(bookToDelete)
-//                    }
-//                    getBooksFromDatabase()
-//                }
+                    viewModel.deleteToekomstigBook(bookToDelete)
+                    Snackbar
+                        .make(viewHolder.itemView, "Het boek is verwijderd", Snackbar.LENGTH_LONG)
+                        .setActionTextColor(Color.RED)
+                        .setAction("UNDO"){
+                            viewModel.insertToekomstigBook(bookToDelete)
+                        }
+                        .show()
+                }
+                toekomstigbooksAdapter.notifyDataSetChanged()
+
             }
         }
         return ItemTouchHelper(callback)

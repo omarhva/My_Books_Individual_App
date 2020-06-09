@@ -19,6 +19,9 @@ interface BookDAO{
     @Update
     fun updateBook(book: Book)
 
+    @Query("DELETE  FROM BookTable")
+    suspend fun deleteAllHuidigBooks()
+
 
 //toekomstigBooks
     @Query("SELECT * FROM ToekmstigBoekTable")
@@ -29,4 +32,8 @@ interface BookDAO{
 
     @Delete
     fun deleteToekomstigBook(book: ToekomstigBoek)
+
+    @Query("DELETE  FROM ToekmstigBoekTable")
+    suspend fun deleteAllToekomstigBooks()
+
 }

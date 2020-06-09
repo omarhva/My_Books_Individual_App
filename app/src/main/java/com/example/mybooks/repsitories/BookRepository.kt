@@ -10,6 +10,7 @@ import com.example.mybooks.model.ToekomstigBoek
 
 public class BookRepository(context: Context) {
     private var bookDao: BookDAO?
+
     // Context object because we need this to access the database.
     init {
         val bookRoomDatabase =
@@ -18,13 +19,13 @@ public class BookRepository(context: Context) {
     }
 
 
-     fun getAllBooks(): LiveData<List<Book>> {
-        return bookDao?.getAllBooks()?: MutableLiveData(emptyList())
+    fun getAllBooks(): LiveData<List<Book>> {
+        return bookDao?.getAllBooks() ?: MutableLiveData(emptyList())
 
     }
 
     suspend fun insertBook(book: Book) {
-       // bookDao.insertBook(Book("BOOKFAKE"))
+        // bookDao.insertBook(Book("BOOKFAKE"))
 
         bookDao?.insertBook(book)
     }
@@ -37,18 +38,26 @@ public class BookRepository(context: Context) {
         bookDao?.updateBook(book)
     }
 
+    suspend fun deleteAllHuidigBooks() {
+        bookDao?.deleteAllHuidigBooks()
+    }
+
 
     //toekomstig
-     fun getAllToeKomstigBooks(): LiveData<List<ToekomstigBoek>>{
-        return bookDao?.getAllToeKomstigBooks()?: MutableLiveData(emptyList())
+    fun getAllToeKomstigBooks(): LiveData<List<ToekomstigBoek>> {
+        return bookDao?.getAllToeKomstigBooks() ?: MutableLiveData(emptyList())
     }
 
     suspend fun insertToeKomstigBook(book: ToekomstigBoek) {
 //        bookDao.insertToeKomstigBook(ToekomstigBoek("fake book"))
         bookDao?.insertToeKomstigBook(book)
     }
-        suspend fun deleteToeKomstigBook(book: ToekomstigBoek) {
+
+    suspend fun deleteToeKomstigBook(book: ToekomstigBoek) {
         bookDao?.deleteToekomstigBook(book)
+    }
+    suspend fun deleteAllToekomstigBooks() {
+        bookDao?.deleteAllToekomstigBooks()
     }
 
 

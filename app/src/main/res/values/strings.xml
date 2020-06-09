@@ -12,5 +12,6 @@
     <string name="title_activity_toekomstig_boeken">ToekomstigBoekenActivity</string>
     <string name="action_Toekomstig">Toekomsitg Boekn</string>
     <string name="action_Huidig">Huidig Boeken</string>
+    <string name="action_settings">Delete</string>
 
 </resources>
