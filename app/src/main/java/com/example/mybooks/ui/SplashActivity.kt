@@ -1,9 +1,10 @@
-package com.example.mybooks
+package com.example.mybooks.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import com.example.mybooks.R
 
 class SplashActivity : AppCompatActivity() {
 

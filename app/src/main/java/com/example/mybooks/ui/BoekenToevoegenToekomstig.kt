@@ -1,10 +1,11 @@
-package com.example.mybooks
+package com.example.mybooks.ui
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.mybooks.R
 import com.example.mybooks.model.ToekomstigBoek
 import kotlinx.android.synthetic.main.activity_boeken_toevoegen_toekomstig.*
 

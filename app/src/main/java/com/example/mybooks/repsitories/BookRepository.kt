@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mybooks.dao.BookDAO
-import com.example.mybooks.BookRoomDatabase
+import com.example.mybooks.database.BookRoomDatabase
 import com.example.mybooks.model.Book
 import com.example.mybooks.model.ToekomstigBoek
 

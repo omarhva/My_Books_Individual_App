@@ -1,4 +1,4 @@
-package com.example.mybooks
+package com.example.mybooks.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -7,50 +7,46 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mybooks.adapter.BookAdapter
-import com.example.mybooks.model.Book
+import com.example.mybooks.adapter.ToekomstigBookAdapter
+import com.example.mybooks.model.ToekomstigBoek
 
-import kotlinx.android.synthetic.main.activity_huidig_books.*
+import kotlinx.android.synthetic.main.activity_toekomstig_boeken.*
 import androidx.lifecycle.Observer
+import com.example.mybooks.MainActivityViewModel
+import com.example.mybooks.R
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_boeken_toevogen.*
 
 
-const val ADD_Book_REQUEST_CODE = 100
-const val TAG = "HuidigActivity"
+const val ADD_TOEKOMSTIG_Book_REQUEST_CODE = 101
+const val TAG1 = "ToekomstigActivity"
 
 
-class HuidigBooksActivity : AppCompatActivity() {
+class ToekomstigBoekenActivity : AppCompatActivity() {
 
-    private var books = arrayListOf<Book>()
-    private lateinit var booksAdapter :BookAdapter
-
-
-
-
-    // private lateinit var bookRepository: BookRepository
+    private var toekomsitgbooks = arrayListOf<ToekomstigBoek>()
+    private lateinit var toekomstigbooksAdapter: ToekomstigBookAdapter
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var recyclerView: RecyclerView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_huidig_books)
+        setContentView(R.layout.activity_toekomstig_boeken)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "My Books"
 
-        recyclerView = findViewById(R.id.rvHuidigBoeken)
+        // bookRepository = BookRepository(this)
+        recyclerView = findViewById(R.id.rvToekomstigBoeken)
 
-        books = arrayListOf()
+        toekomsitgbooks = arrayListOf()
 
-        booksAdapter = BookAdapter(books,{ book: Book-> partItemClicked(book) })
-//        booksAdapter.clickListener
+        toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks,
+            { book: ToekomstigBoek -> partItemClicked(book) })
 
         viewManager = LinearLayoutManager(this)
         createItemTouchHelper().attachToRecyclerView(recyclerView)
@@ -58,12 +54,10 @@ class HuidigBooksActivity : AppCompatActivity() {
         recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
-            adapter = booksAdapter
+            adapter = toekomstigbooksAdapter
         }
         //bookRepository = BookRepository(this)
-
         //initViews()
-
         fab.setOnClickListener {
             startAddActivity()
         }
@@ -71,24 +65,23 @@ class HuidigBooksActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.huidgBooks.observe(this, Observer { books ->
-            this@HuidigBooksActivity.books.clear()
-            this@HuidigBooksActivity.books.addAll(books)
-            booksAdapter.notifyDataSetChanged()
+        viewModel.toekomstigBooks.observe(this, Observer { toekomstigBoeks ->
+            this@ToekomstigBoekenActivity.toekomsitgbooks.clear()
+            this@ToekomstigBoekenActivity.toekomsitgbooks.addAll(toekomstigBoeks)
+            toekomstigbooksAdapter.notifyDataSetChanged()
         })
-
     }
 
-    private fun partItemClicked(book1: Book) {
-        val resultIntent = Intent(this,
-            UbdateHuidigBook::class.java)
-        resultIntent.putExtra(UPDATE_BOOK, book1.bookText)
-        resultIntent.putExtra("id", book1.id)
+    private fun partItemClicked(book: ToekomstigBoek) {
+        val resultIntent = Intent(
+            this,
+            UpdateToekomstigActivity::class.java
+        )
+        resultIntent.putExtra(UPDATE_TOEKOMSTIG_BOOK, book.bookText)
+        resultIntent.putExtra("id", book.id)
 
         setResult(Activity.RESULT_OK, resultIntent)
         startActivity(resultIntent);
-//        Toast.makeText(this, book1.id.toString()+ ""   +book1.bookText, Toast.LENGTH_LONG).show()
-
 
     }
 
@@ -103,97 +96,63 @@ class HuidigBooksActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
-        if (id == R.id.action_settings_toekomstig) {
+        if (id == R.id.action_settings_Huidig) {
             val resultIntent = Intent(
-                this, ToekomstigBoekenActivity::class.java
+                this, HuidigBooksActivity::class.java
             )
             startActivity(resultIntent)
         }
         if (id == R.id.action_delete_Books_list) {
-            deletAllHuidigBooks()
+            deletAllToekomstigBooks()
             true
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun startAddActivity() {
-        val intent = Intent(this, BoekenToevogenActivity::class.java)
-        startActivityForResult(intent, ADD_Book_REQUEST_CODE)
+        val intent = Intent(this, BoekenToevoegenToekomstig::class.java)
+        startActivityForResult(
+            intent,
+            ADD_TOEKOMSTIG_Book_REQUEST_CODE
+        )
     }
-
-
-//    private fun initViews() {
-//        // Initialize the recycler view with a linear layout manager, adapter
-//        rvHuidigBoeken.layoutManager =
-//            LinearLayoutManager(this@HuidigBooksActivity, RecyclerView.VERTICAL, false)
-//        rvHuidigBoeken.adapter = booksAdapter
-//        rvHuidigBoeken.addItemDecoration(
-//            DividerItemDecoration(
-//                this@HuidigBooksActivity,
-//                DividerItemDecoration.VERTICAL
-//            )
-//
-//        )
-//        createItemTouchHelper().attachToRecyclerView(rvHuidigBoeken)
-//        getBooksFromDatabase()
-//
-//    }
-//
-//    private fun getBooksFromDatabase() {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val books = withContext(Dispatchers.IO) {
-//                bookRepository.getAllBooks()
-//            }
-//            this@HuidigBooksActivity.books.clear()
-//            this@HuidigBooksActivity.books.addAll(books)
-//            booksAdapter.notifyDataSetChanged()
-//        }
-//    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
+
+        if (resultCode == Activity.RESULT_OK && requestCode == ADD_TOEKOMSTIG_Book_REQUEST_CODE) {
             when (requestCode) {
-                ADD_Book_REQUEST_CODE -> {
+                ADD_TOEKOMSTIG_Book_REQUEST_CODE -> {
                     data?.let { safeData ->
-                        val book = safeData.getParcelableExtra<Book>(NEW_BOOK)
-                        book?.let { safeBook ->
-                            viewModel.insertHuidgBook(safeBook)
+                        val book =
+                            safeData.getParcelableExtra<ToekomstigBoek>(NEW_ToekomstigBook_BOOK)
+                        book?.let { safeToekomstigBoek ->
+                            viewModel.insertToekomstigBook(safeToekomstigBoek)
                         } ?: run {
-                            Log.e(TAG, "book is null")
+                            Log.e(TAG1, "reminder is null")
                         }
                     } ?: run {
-                        Log.e(TAG, "empty intent data received")
+                        Log.e(TAG1, "empty intent data received")
                     }
-//                    books.add(book)
-//                    booksAdapter.notifyDataSetChanged()
-                    //we gebruiker  Coroutine omdat supsend mthodes worden alleen gecalld via een Coroutine
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        withContext(Dispatchers.IO) {
-//                            bookRepository.insertBook(book)
-//                        }
-//                        getBooksFromDatabase()
-//                    }
-
-
                 }
+
             }
         }
     }
 
-    private fun deletAllHuidigBooks() {
-        val booksToDelete = ArrayList<Book>()
-        booksToDelete.addAll(books)
-        viewModel.deleteAllHuidgBooks()
+    private fun deletAllToekomstigBooks() {
+        val boeksToDelete = ArrayList<ToekomstigBoek>()
+        boeksToDelete.addAll(toekomsitgbooks)
+        viewModel.deleteAllToekomstigBooks()
         Snackbar.make(
-                findViewById(R.id.rvHuidigBoeken),
+                findViewById(R.id.rvToekomstigBoeken),
                 "Alle boeken zijn verwijderd!",
                 Snackbar.LENGTH_LONG
             ).setActionTextColor(Color.RED)
             .setAction("UNDO") {
-                booksToDelete.forEach {
-                    viewModel.insertHuidgBook(it)
+                boeksToDelete.forEach {
+                    viewModel.insertToekomstigBook(it)
                 }
             }.show()
     }
@@ -216,24 +175,23 @@ class HuidigBooksActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val bookToDelete = books[position]
+                val bookToDelete = toekomsitgbooks[position]
                 if (direction == ItemTouchHelper.LEFT) {
 
-                    viewModel.deleteHuidgBook(bookToDelete)
+                    viewModel.deleteToekomstigBook(bookToDelete)
                     Snackbar
                         .make(viewHolder.itemView, "Het boek is verwijderd", Snackbar.LENGTH_LONG)
                         .setActionTextColor(Color.RED)
                         .setAction("UNDO") {
-                            viewModel.insertHuidgBook(bookToDelete)
+                            viewModel.insertToekomstigBook(bookToDelete)
                         }
                         .show()
                 }
-                booksAdapter.notifyDataSetChanged()
+                toekomstigbooksAdapter.notifyDataSetChanged()
 
             }
         }
         return ItemTouchHelper(callback)
     }
-
 
 }

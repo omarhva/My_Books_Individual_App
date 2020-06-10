@@ -1,10 +1,11 @@
-package com.example.mybooks
+package com.example.mybooks.ui
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.mybooks.R
 import com.example.mybooks.model.Book
 import kotlinx.android.synthetic.main.activity_boeken_toevogen.*
 
@@ -45,24 +46,5 @@ class BoekenToevogenActivity : AppCompatActivity() {
         }
     }
 
-//    private fun onSaveClickToekomstigBoek() {
-//        if (etAddBoek.text.toString().isNotBlank()) {
-//            val book = Book(etAddBoek.text.toString())
-//            val resultIntent = Intent()
-//            resultIntent.putExtra(NEW_ToekomstigBook_BOOK, book)
-//            setResult(Activity.RESULT_OK, resultIntent)
-//            finish()
-//        } else {
-//            Toast.makeText(
-//                this, "Je hebt niks toegevoegd"
-//                , Toast.LENGTH_SHORT
-//            ).show()
-////            //Go back to ToekomstigBoeken
-//            val resultIntent = Intent(
-//                this,
-//                ToekomstigBoekenActivity::class.java
-//            )
-//            startActivity(resultIntent);
-//        }
-//    }
+
 }

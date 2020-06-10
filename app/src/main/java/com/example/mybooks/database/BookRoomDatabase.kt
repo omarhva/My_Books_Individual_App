@@ -1,4 +1,4 @@
-package com.example.mybooks
+package com.example.mybooks.database
 
 import android.content.Context
 import androidx.room.Database
@@ -26,7 +26,8 @@ abstract class BookRoomDatabase : RoomDatabase() {
                     if (bookRoomDatabaseInstance == null) {
                         bookRoomDatabaseInstance = Room.databaseBuilder(
                                 context.applicationContext,
-                                BookRoomDatabase::class.java, DATABASE_NAME
+                                BookRoomDatabase::class.java,
+                                DATABASE_NAME
                             )
                             .allowMainThreadQueries()
                             .build()

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/backgorund"
 
-    tools:context=".BoekenToevoegenToekomstig">
+    tools:context=".ui.BoekenToevoegenToekomstig">
 
     <TextView
         android:id="@+id/textView1"

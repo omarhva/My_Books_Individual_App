@@ -1,4 +1,4 @@
-package com.example.mybooks
+package com.example.mybooks.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -12,42 +12,42 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mybooks.adapter.ToekomstigBookAdapter
-import com.example.mybooks.model.ToekomstigBoek
+import com.example.mybooks.adapter.BookAdapter
+import com.example.mybooks.model.Book
 
-import kotlinx.android.synthetic.main.activity_toekomstig_boeken.*
+import kotlinx.android.synthetic.main.activity_huidig_books.*
 import androidx.lifecycle.Observer
+import com.example.mybooks.*
 import com.google.android.material.snackbar.Snackbar
 
 
-const val ADD_TOEKOMSTIG_Book_REQUEST_CODE = 101
-const val TAG1 = "ToekomstigActivity"
+const val ADD_Book_REQUEST_CODE = 100
+const val TAG = "HuidigActivity"
 
 
-class ToekomstigBoekenActivity : AppCompatActivity() {
+class HuidigBooksActivity : AppCompatActivity() {
 
-    private var toekomsitgbooks = arrayListOf<ToekomstigBoek>()
-   // private var toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
-   private lateinit var toekomstigbooksAdapter : ToekomstigBookAdapter
+    private var books = arrayListOf<Book>()
+    private lateinit var booksAdapter: BookAdapter
+
 
     // private lateinit var bookRepository: BookRepository
-
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var recyclerView: RecyclerView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_toekomstig_boeken)
+        setContentView(R.layout.activity_huidig_books)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "My Books"
 
-        // bookRepository = BookRepository(this)
-        recyclerView = findViewById(R.id.rvToekomstigBoeken)
+        recyclerView = findViewById(R.id.rvHuidigBoeken)
 
-        toekomsitgbooks = arrayListOf()
+        books = arrayListOf()
 
-        toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks,{ book: ToekomstigBoek -> partItemClicked(book) })
+        booksAdapter = BookAdapter(books, { book: Book -> partItemClicked(book) })
+//        booksAdapter.clickListener
 
         viewManager = LinearLayoutManager(this)
         createItemTouchHelper().attachToRecyclerView(recyclerView)
@@ -55,10 +55,12 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
         recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
-            adapter = toekomstigbooksAdapter
+            adapter = booksAdapter
         }
         //bookRepository = BookRepository(this)
+
         //initViews()
+
         fab.setOnClickListener {
             startAddActivity()
         }
@@ -66,21 +68,24 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.toekomstigBooks.observe(this, Observer { toekomstigBoeks ->
-            this@ToekomstigBoekenActivity.toekomsitgbooks.clear()
-            this@ToekomstigBoekenActivity.toekomsitgbooks.addAll(toekomstigBoeks)
-            toekomstigbooksAdapter.notifyDataSetChanged()
+        viewModel.huidgBooks.observe(this, Observer { books ->
+            this@HuidigBooksActivity.books.clear()
+            this@HuidigBooksActivity.books.addAll(books)
+            booksAdapter.notifyDataSetChanged()
         })
+
     }
-    private fun partItemClicked(book: ToekomstigBoek) {
-        val resultIntent = Intent(this,
-            UpdateToekomstigActivity::class.java)
-        resultIntent.putExtra(UPDATE_TOEKOMSTIG_BOOK, book.bookText)
-        resultIntent.putExtra("id", book.id)
+
+    private fun partItemClicked(book1: Book) {
+        val resultIntent = Intent(
+            this,
+            UbdateHuidigBook::class.java
+        )
+        resultIntent.putExtra(UPDATE_BOOK, book1.bookText)
+        resultIntent.putExtra("id", book1.id)
 
         setResult(Activity.RESULT_OK, resultIntent)
         startActivity(resultIntent);
-//        Toast.makeText(this, book1.id.toString()+ ""   +book1.bookText, Toast.LENGTH_LONG).show()
 
 
     }
@@ -95,66 +100,61 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//
-//            else -> super.onOptionsItemSelected(item)
-//        }
         val id = item.itemId
-        if (id == R.id.action_settings_Huidig) {
+        if (id == R.id.action_settings_toekomstig) {
             val resultIntent = Intent(
-                this, HuidigBooksActivity::class.java
+                this, ToekomstigBoekenActivity::class.java
             )
             startActivity(resultIntent)
         }
         if (id == R.id.action_delete_Books_list) {
-            deletAllToekomstigBooks()
+            deletAllHuidigBooks()
             true
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun startAddActivity() {
-        val intent = Intent(this, BoekenToevoegenToekomstig::class.java)
-        startActivityForResult(intent, ADD_TOEKOMSTIG_Book_REQUEST_CODE)
+        val intent = Intent(this, BoekenToevogenActivity::class.java)
+        startActivityForResult(
+            intent,
+            ADD_Book_REQUEST_CODE
+        )
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK && requestCode == ADD_TOEKOMSTIG_Book_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                ADD_TOEKOMSTIG_Book_REQUEST_CODE -> {
+                ADD_Book_REQUEST_CODE -> {
                     data?.let { safeData ->
-                        val book =
-                            safeData.getParcelableExtra<ToekomstigBoek>(NEW_ToekomstigBook_BOOK)
-                        book?.let { safeToekomstigBoek ->
-                            viewModel.insertToekomstigBook(safeToekomstigBoek)
+                        val book = safeData.getParcelableExtra<Book>(NEW_BOOK)
+                        book?.let { safeBook ->
+                            viewModel.insertHuidgBook(safeBook)
                         } ?: run {
-                            Log.e(TAG1, "reminder is null")
+                            Log.e(TAG, "book is null")
                         }
                     } ?: run {
-                        Log.e(TAG1, "empty intent data received")
+                        Log.e(TAG, "empty intent data received")
                     }
                 }
-
             }
         }
     }
 
-    private fun deletAllToekomstigBooks() {
-        val boeksToDelete = ArrayList<ToekomstigBoek>()
-        boeksToDelete.addAll(toekomsitgbooks)
-        viewModel.deleteAllToekomstigBooks()
+    private fun deletAllHuidigBooks() {
+        val booksToDelete = ArrayList<Book>()
+        booksToDelete.addAll(books)
+        viewModel.deleteAllHuidgBooks()
         Snackbar.make(
-                findViewById(R.id.rvToekomstigBoeken),
+                findViewById(R.id.rvHuidigBoeken),
                 "Alle boeken zijn verwijderd!",
                 Snackbar.LENGTH_LONG
             ).setActionTextColor(Color.RED)
             .setAction("UNDO") {
-                boeksToDelete.forEach {
-                    viewModel.insertToekomstigBook(it)
+                booksToDelete.forEach {
+                    viewModel.insertHuidgBook(it)
                 }
             }.show()
     }
@@ -177,23 +177,24 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             // Callback triggered when a user swiped an item.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val bookToDelete = toekomsitgbooks[position]
+                val bookToDelete = books[position]
                 if (direction == ItemTouchHelper.LEFT) {
 
-                    viewModel.deleteToekomstigBook(bookToDelete)
+                    viewModel.deleteHuidgBook(bookToDelete)
                     Snackbar
                         .make(viewHolder.itemView, "Het boek is verwijderd", Snackbar.LENGTH_LONG)
                         .setActionTextColor(Color.RED)
                         .setAction("UNDO") {
-                            viewModel.insertToekomstigBook(bookToDelete)
+                            viewModel.insertHuidgBook(bookToDelete)
                         }
                         .show()
                 }
-                toekomstigbooksAdapter.notifyDataSetChanged()
+                booksAdapter.notifyDataSetChanged()
 
             }
         }
         return ItemTouchHelper(callback)
     }
+
 
 }

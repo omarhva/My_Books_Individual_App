@@ -1,10 +1,12 @@
-package com.example.mybooks
+package com.example.mybooks.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.example.mybooks.MainActivityViewModel
+import com.example.mybooks.R
 import com.example.mybooks.model.Book
 import kotlinx.android.synthetic.main.activity_ubdate_huidig_book.*
 

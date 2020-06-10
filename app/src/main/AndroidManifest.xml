@@ -11,20 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".UpdateToekomstigActivity"></activity>
-        <activity android:name=".UbdateHuidigBook" />
-        <activity android:name=".BoekenToevoegenToekomstig" />
+        <activity android:name=".ui.UpdateToekomstigActivity"></activity>
+        <activity android:name=".ui.UbdateHuidigBook" />
+        <activity android:name=".ui.BoekenToevoegenToekomstig" />
         <activity
-            android:name=".ToekomstigBoekenActivity"
+            android:name=".ui.ToekomstigBoekenActivity"
             android:label="@string/title_activity_toekomstig_boeken"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BoekenToevogenActivity" />
+        <activity android:name=".ui.BoekenToevogenActivity" />
         <activity
-            android:name=".HuidigBooksActivity"
+            android:name=".ui.HuidigBooksActivity"
             android:label="@string/title_activity_huidig_books"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.SplashActivity"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
