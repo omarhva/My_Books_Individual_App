@@ -8,12 +8,18 @@ import com.example.mybooks.R
 import com.example.mybooks.model.Book
 import kotlinx.android.synthetic.main.item_huidig_boek.view.*
 
-class BookAdapter(private val books: List<Book>) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+class BookAdapter(private val books: List<Book>, val clickListener: (Book) -> Unit) :
+    RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(books: Book) {
+        fun bind(books: Book, clickListener: (Book) -> Unit) {
             itemView.tvHuidigBoek.text = books.bookText
+            itemView.setOnClickListener { var position = adapterPosition
+                if (this@BookAdapter.clickListener != null && position != RecyclerView.NO_POSITION) {
+                    (this@BookAdapter.clickListener)(books)
+                }
+            }
 
         }
     }
@@ -38,7 +44,8 @@ class BookAdapter(private val books: List<Book>) : RecyclerView.Adapter<BookAdap
      * Called by RecyclerView to display the data at the specified position.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(books[position])
+        holder.bind(books[position],clickListener)
+
     }
 
 

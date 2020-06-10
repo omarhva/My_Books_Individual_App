@@ -24,7 +24,7 @@ public class BookRepository(context: Context) {
 
     }
 
-    suspend fun insertBook(book: Book) {
+     fun insertBook(book: Book) {
         // bookDao.insertBook(Book("BOOKFAKE"))
 
         bookDao?.insertBook(book)
@@ -34,7 +34,7 @@ public class BookRepository(context: Context) {
         bookDao?.deleteBook(book)
     }
 
-    suspend fun updateBook(book: Book) {
+     fun updateBook(book: Book) {
         bookDao?.updateBook(book)
     }
 
@@ -48,7 +48,7 @@ public class BookRepository(context: Context) {
         return bookDao?.getAllToeKomstigBooks() ?: MutableLiveData(emptyList())
     }
 
-    suspend fun insertToeKomstigBook(book: ToekomstigBoek) {
+     fun insertToeKomstigBook(book: ToekomstigBoek) {
 //        bookDao.insertToeKomstigBook(ToekomstigBoek("fake book"))
         bookDao?.insertToeKomstigBook(book)
     }
@@ -56,8 +56,13 @@ public class BookRepository(context: Context) {
     suspend fun deleteToeKomstigBook(book: ToekomstigBoek) {
         bookDao?.deleteToekomstigBook(book)
     }
+
     suspend fun deleteAllToekomstigBooks() {
         bookDao?.deleteAllToekomstigBooks()
+    }
+
+     fun updateToekomstigBook(book: ToekomstigBoek) {
+        bookDao?.updateToekomstigBook(book)
     }
 
 

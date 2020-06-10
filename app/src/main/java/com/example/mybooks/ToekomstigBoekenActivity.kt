@@ -27,7 +27,9 @@ const val TAG1 = "ToekomstigActivity"
 class ToekomstigBoekenActivity : AppCompatActivity() {
 
     private var toekomsitgbooks = arrayListOf<ToekomstigBoek>()
-    private var toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
+   // private var toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
+   private lateinit var toekomstigbooksAdapter : ToekomstigBookAdapter
+
     // private lateinit var bookRepository: BookRepository
 
     private val viewModel: MainActivityViewModel by viewModels()
@@ -45,7 +47,7 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
 
         toekomsitgbooks = arrayListOf()
 
-        toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks)
+        toekomstigbooksAdapter = ToekomstigBookAdapter(toekomsitgbooks,{ book: ToekomstigBoek -> partItemClicked(book) })
 
         viewManager = LinearLayoutManager(this)
         createItemTouchHelper().attachToRecyclerView(recyclerView)
@@ -70,6 +72,18 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             toekomstigbooksAdapter.notifyDataSetChanged()
         })
     }
+    private fun partItemClicked(book: ToekomstigBoek) {
+        val resultIntent = Intent(this,
+            UpdateToekomstigActivity::class.java)
+        resultIntent.putExtra(UPDATE_TOEKOMSTIG_BOOK, book.bookText)
+        resultIntent.putExtra("id", book.id)
+
+        setResult(Activity.RESULT_OK, resultIntent)
+        startActivity(resultIntent);
+//        Toast.makeText(this, book1.id.toString()+ ""   +book1.bookText, Toast.LENGTH_LONG).show()
+
+
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -93,7 +107,7 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             )
             startActivity(resultIntent)
         }
-        if (id==R.id.action_delete_Books_list){
+        if (id == R.id.action_delete_Books_list) {
             deletAllToekomstigBooks()
             true
         }
@@ -105,33 +119,7 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
         startActivityForResult(intent, ADD_TOEKOMSTIG_Book_REQUEST_CODE)
     }
 
-//    private fun initViews() {
-//        // Initialize the recycler view with a linear layout manager, adapter
-//        rvToekomstigBoeken.layoutManager =
-//            LinearLayoutManager(this@ToekomstigBoekenActivity, RecyclerView.VERTICAL, false)
-//        rvToekomstigBoeken.adapter = toekomstigbooksAdapter
-//        rvToekomstigBoeken.addItemDecoration(
-//            DividerItemDecoration(
-//                this@ToekomstigBoekenActivity,
-//                DividerItemDecoration.VERTICAL
-//            )
-//
-//        )
-//        createItemTouchHelper().attachToRecyclerView(rvToekomstigBoeken)
-//        getBooksFromDatabase()
-//
-//    }
 
-    //    private fun getBooksFromDatabase() {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val books = withContext(Dispatchers.IO) {
-//                bookRepository.getAllToeKomstigBooks()
-//            }
-//            this@ToekomstigBoekenActivity.toekomsitgbooks.clear()
-//            this@ToekomstigBoekenActivity.toekomsitgbooks.addAll(books)
-//            toekomstigbooksAdapter.notifyDataSetChanged()
-//        }
-//    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -150,20 +138,11 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
                         Log.e(TAG1, "empty intent data received")
                     }
                 }
-//                    books.add(book)
-//                    booksAdapter.notifyDataSetChanged()
-                //we gebruiker  Coroutine omdat supsend mthodes worden alleen gecalld via een Coroutine
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        withContext(Dispatchers.IO) {
-//                            bookRepository.insertToeKomstigBook(book)
-//                        }
-//                        getBooksFromDatabase()
-//                    }
-
 
             }
         }
     }
+
     private fun deletAllToekomstigBooks() {
         val boeksToDelete = ArrayList<ToekomstigBoek>()
         boeksToDelete.addAll(toekomsitgbooks)
@@ -199,13 +178,13 @@ class ToekomstigBoekenActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val bookToDelete = toekomsitgbooks[position]
-                if(direction == ItemTouchHelper.LEFT) {
+                if (direction == ItemTouchHelper.LEFT) {
 
                     viewModel.deleteToekomstigBook(bookToDelete)
                     Snackbar
                         .make(viewHolder.itemView, "Het boek is verwijderd", Snackbar.LENGTH_LONG)
                         .setActionTextColor(Color.RED)
-                        .setAction("UNDO"){
+                        .setAction("UNDO") {
                             viewModel.insertToekomstigBook(bookToDelete)
                         }
                         .show()

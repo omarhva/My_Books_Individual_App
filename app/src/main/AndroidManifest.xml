@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".BoekenToevoegenToekomstig"></activity>
+        <activity android:name=".UpdateToekomstigActivity"></activity>
+        <activity android:name=".UbdateHuidigBook" />
+        <activity android:name=".BoekenToevoegenToekomstig" />
         <activity
             android:name=".ToekomstigBoekenActivity"
             android:label="@string/title_activity_toekomstig_boeken"

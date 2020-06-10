@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,6 +19,7 @@ import com.example.mybooks.model.Book
 import kotlinx.android.synthetic.main.activity_huidig_books.*
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_boeken_toevogen.*
 
 
 const val ADD_Book_REQUEST_CODE = 100
@@ -27,7 +29,10 @@ const val TAG = "HuidigActivity"
 class HuidigBooksActivity : AppCompatActivity() {
 
     private var books = arrayListOf<Book>()
-    private var booksAdapter = BookAdapter(books)
+    private lateinit var booksAdapter :BookAdapter
+
+
+
 
     // private lateinit var bookRepository: BookRepository
     private val viewModel: MainActivityViewModel by viewModels()
@@ -44,7 +49,8 @@ class HuidigBooksActivity : AppCompatActivity() {
 
         books = arrayListOf()
 
-        booksAdapter = BookAdapter(books)
+        booksAdapter = BookAdapter(books,{ book: Book-> partItemClicked(book) })
+//        booksAdapter.clickListener
 
         viewManager = LinearLayoutManager(this)
         createItemTouchHelper().attachToRecyclerView(recyclerView)
@@ -73,6 +79,19 @@ class HuidigBooksActivity : AppCompatActivity() {
 
     }
 
+    private fun partItemClicked(book1: Book) {
+        val resultIntent = Intent(this,
+            UbdateHuidigBook::class.java)
+        resultIntent.putExtra(UPDATE_BOOK, book1.bookText)
+        resultIntent.putExtra("id", book1.id)
+
+        setResult(Activity.RESULT_OK, resultIntent)
+        startActivity(resultIntent);
+//        Toast.makeText(this, book1.id.toString()+ ""   +book1.bookText, Toast.LENGTH_LONG).show()
+
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu, menu)
@@ -83,11 +102,6 @@ class HuidigBooksActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//
-//            else -> super.onOptionsItemSelected(item)
-//        }
         val id = item.itemId
         if (id == R.id.action_settings_toekomstig) {
             val resultIntent = Intent(

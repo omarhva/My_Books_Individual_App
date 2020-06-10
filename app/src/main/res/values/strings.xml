@@ -13,5 +13,9 @@
     <string name="action_Toekomstig">Toekomsitg Boekn</string>
     <string name="action_Huidig">Huidig Boeken</string>
     <string name="action_settings">Delete</string>
+    <string name="btn_update">save</string>
+    <string name="Title_update_Huidig">Update Huidig Boek</string>
+    <string name="Title_update_Toekomstig">Update Toekomstig Boek</string>
+    <string name="Text_Update">Klik de button hieronder om het boek op te slaan</string>
 
 </resources>

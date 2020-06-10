@@ -27,7 +27,7 @@
         android:layout_width="387dp"
         android:layout_height="88dp"
         android:layout_marginTop="144dp"
-        android:textColorHint="#FAFFFFFF"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.302"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,10 @@
             android:layout_height="wrap_content"
             android:hint="@string/placeHolderInput"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textColorLink="#FFFFFF"
+            android:textSize="24sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

@@ -33,9 +33,16 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             bookRepository.deleteBook(boek)
         }
     }
+
     fun deleteAllHuidgBooks() {
         ioScope.launch {
             bookRepository.deleteAllHuidigBooks()
+        }
+    }
+
+    fun updateHuidgBook(boek: Book) {
+        ioScope.launch {
+            bookRepository.updateBook(boek)
         }
     }
 
@@ -55,10 +62,18 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             bookRepository.deleteToeKomstigBook(boek)
         }
     }
+
     fun deleteAllToekomstigBooks() {
         ioScope.launch {
             bookRepository.deleteAllToekomstigBooks()
         }
     }
+
+    fun updateToekomstigBook(boek: ToekomstigBoek) {
+        ioScope.launch {
+            bookRepository.updateToekomstigBook(boek)
+        }
+    }
+
 
 }

@@ -4,21 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgorund"
-
-    tools:context=".BoekenToevoegenToekomstig">
+    tools:context=".UbdateHuidigBook"
+    android:background="@drawable/backgorund">
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="367dp"
-        android:layout_height="100dp"
+        android:id="@+id/textView"
+        android:layout_width="370dp"
+        android:layout_height="85dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/background_layout_titels"
-        android:text="@string/titleToekomstigboekentoevoegen"
+        android:text="@string/Title_update_Huidig"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="#F5EFEF"
         android:textSize="30sp"
-        android:textStyle="italic"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,16 +26,15 @@
         android:id="@+id/textInputLayout"
         android:layout_width="387dp"
         android:layout_height="88dp"
-        android:layout_marginTop="100dp"
-        android:scrollbarSize="4dp"
+        android:layout_marginTop="144dp"
         android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintHorizontal_bias="0.302"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etAddToekomstigBoek"
+            android:id="@+id/etUpdateBoek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/placeHolderInput"
@@ -48,38 +46,33 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/Quistion"
+        android:id="@+id/textView2"
         android:layout_width="378dp"
         android:layout_height="64dp"
-        android:layout_marginTop="100dp"
-        android:text="@string/quistion"
+        android:layout_marginTop="104dp"
+        android:text="@string/Text_Update"
         android:textAlignment="center"
-        android:textColor="#F3E9E9"
-        android:textColorLink="#B0E7B7"
+        android:textColor="#F8F5F5"
         android:textSize="24sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.757"
+        app:layout_constraintHorizontal_bias="0.615"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <Button
-        android:id="@+id/btToekomstig"
+        android:id="@+id/btupdateHuidig"
         android:layout_width="289dp"
         android:layout_height="72dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="62dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginStart="64dp"
         android:background="@drawable/background_buttens"
-        android:text="@string/buttonToekomsitgeBoeken"
-        android:textColor="#F3EEEE"
-        android:textColorLink="#FFFFFF"
+        android:text="@string/btn_update"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Quistion" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.443" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
